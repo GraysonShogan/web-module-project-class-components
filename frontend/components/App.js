@@ -1,46 +1,59 @@
 import React from "react";
+import TodoList from "./TodoList";
+import Form from "./Form";
 
 export default class App extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       todos: [
         {
-          task: "Organize Garage",
+          name: "Organize Garage",
           id: 1528817077286,
           completed: false,
         },
         {
-          task: "Bake Cookies",
+          name: "Bake Cookies",
           id: 1528817084358,
-          completed: false,
+          completed: true,
         },
       ],
     };
   }
+
+  clear = () => {
+    this.setState({
+      ...this.state,
+      todos: this.state.todos.filter((todo) => {
+        return todo.completed === false;
+      }),
+    });
+  };
+  handleAdd = (name) => {
+    const newTodo = {
+      name: name,
+      id: Date.now(),
+      completed: false,
+    };
+    this.setState({
+      ...this.state,
+      todos: [...this.state.todos, newTodo],
+    });
+  };
+
+  handleToggle = () => {};
+
   render() {
     const { todos } = this.state;
+    console.log(this.state);
     return (
       <div>
-        <h1>TODOS</h1>
-
-        <ul>
-          {todos.map((todo) => {
-            return (
-              <li key={todos.id}>
-                {todo.task}{" "}
-                {todo.completed ? <span>- completed</span> : <span></span>}
-              </li>
-            );
-          })}
-        </ul>
-
-        <form>
-          <input type="text" />
-          <button>Add</button>
-        </form>
-
-        <button>Clear</button>
+        Todo App <br />
+        <br />
+        <TodoList todos={todos} />
+        {/* <Todo todos={this.props.todos}/> */}
+        <Form handleAdd={this.handleAdd} />
+        <button onClick={this.clear}>clear</button>
       </div>
     );
   }
